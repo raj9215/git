@@ -1,50 +1,36 @@
 module.exports = app => {
 
-    const controller = require("../controllers/controller");
+  const controller = require("../controllers/controller");
 
-    const router = require("express").Router();
+  const router = require("express").Router();
 
-    const multer = require("multer")
+  const uploads = require("../utils/multer");
 
-    const storage = multer.diskStorage({
-        destination: (req, file, cb) => {
-          cb(null, "uploads/")
-        },
-        filename: (req, file, cb) => {
-          cb(null, Date.now() + "-" + file.originalname)
-        },
-      })
+  router.post("/blogs", controller.find_blogs);
 
-      const uploadStorage = multer({ storage: storage })
+  router.get("/blogs", controller.findAll);
 
+  router.get("/testimonials", controller.RetrieveAll);
 
+  router.post("/testimonials", controller.getAll);
 
-    router.post("/blogs", controller.find_blogs);
+  router.get("/technologies", controller.technologies);
 
-    router.get("/blogs", controller.findAll);
+  router.post("/portfolio_categories", controller.portfolio_categories);
 
-    router.get("/testimonials", controller.RetrieveAll);
+  router.post("/contacts", controller.contacts);
 
-    router.post("/testimonials", controller.getAll);
+  router.get("/careerVacancies", controller.careerVacancies);
 
-    router.get("/technologies", controller.technologies);
+  router.post("/newsletters", controller.newsletters);
 
-    router.post("/portfolio_categories", controller.portfolio_categories);
+  router.get("/aboutUs", controller.gallery_images);
 
-    router.post("/contacts", controller.contacts);
+  router.post("/aboutUs", controller.aboutUs);
 
-    router.get("/careerVacancies", controller.careerVacancies);
+  router.post("/carrer_applies", uploads, controller.carrer_applies);
 
-    router.post("/newsletters", controller.newsletters);
-
-    router.get("/aboutUs", controller.gallery_images);
-
-    router.post("/aboutUs", controller.aboutUs);
-
-    router.post("/carrer_applies",uploadStorage.single("resume"), controller.carrer_applies);
-
-    app.use('/api', router);
-    //app.use('/api',router,swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+  app.use('/api', router);
 
 };
 
