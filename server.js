@@ -4,38 +4,6 @@ const cors = require("cors");
 
 const path = require("path");
 
-// const swaggerJsdoc = require('swagger-jsdoc');
-// const swaggerUi = require("swagger-ui-express");
-
-// const options = {
-//   definition: {
-//     openapi: '3.0.0',
-//     info: {
-//       title: 'Hello World',
-//       version: '1.0.0',
-//     },
-//     servers:[
-//       {
-//        url: "http://localhost:8080"
-//       }
-//     ],
-//     swagger: "^0.7.5",
-//     basePath: '/v2',
-//     schemes: [
-//       'http',
-//       'https'
-//   ],
-//   consumes: [
-//     'application/json'
-// ],
-// produces: [
-//     'application/json'
-// ],
-//   },
-//   apis: ['./app/routes/routes.js'], // files containing annotations as above
-// }
-// const swaggerSpec = swaggerJsdoc(options);
-
 const app = express();
 
 var corsOptions = {
@@ -45,8 +13,6 @@ var corsOptions = {
 };
 
 app.use(cors(corsOptions));
-//app.use('/api',swaggerUi.serve, swaggerUi.setup(swaggerSpec))
-// requests of content-type - application/json
 
 app.use(express.json());
 

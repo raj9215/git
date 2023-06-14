@@ -4,6 +4,8 @@ const nodemailer = require("nodemailer");
 
 require('dotenv').config();
 
+const { create_response, fetch_data } = require("../helpers/responce.send");
+
 //Retrieve all blogs from the database
 
 exports.find_blogs = (req, res) => {
@@ -14,10 +16,7 @@ exports.find_blogs = (req, res) => {
 
     if (err) throw err;
 
-    return res.status(200).send({
-      data, "status": true,
-      "message": "Data get successfully!",
-    });
+    return fetch_data(data, res);
 
   });
 
@@ -34,10 +33,7 @@ exports.findAll = (req, res) => {
 
     if (err) throw err;
 
-    return res.status(200).send({
-      data, "status": true,
-      "message": "Data get successfully!"
-    });
+    return fetch_data(data, res);
 
   });
 
@@ -54,11 +50,7 @@ exports.RetrieveAll = (req, res) => {
 
     if (error) throw error;
 
-    return res.status(200).send({
-      data,
-      "status": true,
-      "message": "Data get successfully!"
-    });
+    return fetch_data(data, res);
 
   });
 
@@ -76,11 +68,7 @@ exports.getAll = (req, res) => {
 
     if (error) throw error;
 
-    return res.status(200).send({
-      data,
-      "status": true,
-      "message": "Data get successfully!"
-    });
+    return fetch_data(data, res);
 
   });
 
@@ -96,11 +84,7 @@ exports.technologies = (req, res) => {
 
     if (error) throw error;
 
-    return res.status(200).send({
-      data,
-      "status": true,
-      "message": "Data get successfully!"
-    });
+    return fetch_data(data, res);
 
   })
 };
@@ -117,40 +101,29 @@ exports.portfolio_categories = (req, res) => {
 
     database.query(query, function (error, data) {
 
+      var allData = [];
+
       data.forEach(element => {
 
         const img = element.image;
 
         const Arr = img.split(",");
 
-        Arr.forEach(ele => {
+        Arr.map((obj) => {
 
-          const imgs = ele;
-          const Array = imgs.split("[");
+          newObj = obj.slice("1");
 
-          Array.forEach(elem => {
+          output = newObj.split("]")[0]
 
-            const imges = elem;
+          allData.push(output);
+        })
 
-            const myArray = imges.split("]");
-
-            myArray.forEach(elems => {
-
-              let datas = elems;
-
-              console.log(datas);
-
-            });
-          });
-        });
       });
+
+
       if (error) throw error;
 
-      return res.status(200).send({
-        data,
-        "status": true,
-        "message": "Data get successfully!"
-      });
+      return fetch_data(allData, res);
 
     })
 
@@ -160,39 +133,28 @@ exports.portfolio_categories = (req, res) => {
 
     database.query(query, function (error, data) {
 
+      var allData = [];
+
       data.forEach(element => {
 
         const img = element.image;
 
         const Arr = img.split(",");
 
-        Arr.forEach(ele => {
+        Arr.map((obj) => {
 
-          const imgs = ele;
+          newObj = obj.slice("1");
 
-          const Array = imgs.split("[");
+          output = newObj.split("]")[0]
 
-          Array.forEach(elem => {
+          allData.push(output);
 
-            const imges = elem;
-
-            const myArray = imges.split("]");
-
-            myArray.forEach(elems => {
-
-              console.log(elems);
-
-            });
-          });
-        });
+        })
       });
+
       if (error) throw error;
 
-      return res.status(200).send({
-        data,
-        "status": true,
-        "message": "Data get successfully!"
-      });
+      return fetch_data(allData, res);
 
     })
 
@@ -220,7 +182,7 @@ exports.contacts = (req, res) => {
 
     if (error) throw error;
 
-    return res.status(200).send({ "status": true, message: " registered successfully!" });
+    return create_response(res);
 
   })
 
@@ -236,17 +198,14 @@ exports.careerVacancies = (req, res) => {
 
     if (error) throw error;
 
-    return res.status(200).send({
-      data,
-      "status": true,
-      "message": "Data get successfully!"
-    });
+    return fetch_data(data, res);
 
   });
 
 }
 
 //Post API newsletters
+
 exports.newsletters = (req, res) => {
 
   const email = req.body.email;
@@ -257,10 +216,7 @@ exports.newsletters = (req, res) => {
 
     if (error) throw error;
 
-    return res.status(200).send({
-      "status": true,
-      message: "insert data successfully!"
-    });
+    return create_response(res);
   })
 
 }
@@ -273,37 +229,29 @@ exports.gallery_images = (req, res) => {
 
   database.query(query, function (err, data) {
 
+    var allData = [];
+
     data.forEach(element => {
-      
-      result = element.pictures;
 
-      const myArray = result.split(",");
+      const img = element.pictures;
 
-      var arr = Array.prototype.concat.apply([], myArray);
+      const Arr = img.split(",");
 
-      arr.forEach(ele => {
+      Arr.map((obj) => {
 
-        const Array = ele.split("[");
+        newObj = obj.slice("1");
 
-        Array.forEach(elem => {
+        output = newObj.split("]")[0]
 
-          const Arr = elem.split("]");
+        allData.push(output)
+      })
 
-          Arr.forEach(eleme => {
-
-            var resdata = eleme;
-
-            console.log(resdata);
-
-          });
-        });
-      });
     })
-    res.json({
-      data,
-      'status': true,
-      "messagae": "Data Geted Successfully!",
-    });
+
+    if (err) throw error;
+
+    return fetch_data(allData, res);
+
   });
 }
 
@@ -317,37 +265,28 @@ exports.aboutUs = (req, res) => {
 
   database.query(query, function (err, data) {
 
-    const iterator = data.values();
+    var allData = [];
 
-    for (const letter of iterator) {
+    data.forEach(element => {
 
-      responce = letter.pictures;
+      const img = element.pictures;
 
-      const myArray = responce.split(",");
+      const Arr = img.split(",");
 
-      myArray.forEach(element => {
+      Arr.map((obj) => {
 
-        const myArray = element.split("[");
+        newObj = obj.slice("1");
 
-        myArray.forEach(ele => {
+        output = newObj.split("]")[0]
 
-          const Array = ele.split("]");
+        allData.push(output);
+      })
+    });
 
-          Array.forEach(elem => {
+    if (err) throw err;
 
-            console.log(elem);
+    return fetch_data(allData, res);
 
-          });
-        });
-      });
-      if (err) throw err;
-
-      return res.status(200).send({
-        'status': true,
-        "messagae": "Data Geted Successfully!"
-      });
-
-    }
   });
 
 }
@@ -410,10 +349,7 @@ exports.carrer_applies = (req, res) => {
 
     if (error) throw error;
 
-    return res.status(200).send({
-      "status": true,
-      message: "Data inserted successfully!"
-    });
+    return create_response(res);
 
   })
 
